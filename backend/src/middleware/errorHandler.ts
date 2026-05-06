@@ -6,7 +6,8 @@ interface ErrorResponse {
   statusCode: number;
   message: string;
   errorCode?: string;
-  // ...[key: string]: any;
+  details?: unknown;
+  [key: string]: unknown;
 }
 
 export const errorHandler = (
@@ -49,9 +50,12 @@ export const errorHandler = (
     return;
   }
 
-  // Handle MongoDB errors
-  if (error.name === 'MongoServerError' && error.cause === 11000) {
-    const field = Object.keys((error as any).keyPattern)[0];
+  // Handle MongoDB duplicate key error
+  const mongoError = error as any;
+
+  if (error.name === 'MongoServerError' && mongoError.code === 11000) {
+    const field = Object.keys(mongoError.keyPattern || {})[0];
+
     res.status(409).json({
       statusCode: 409,
       message: `${field} already exists`,
@@ -60,12 +64,15 @@ export const errorHandler = (
     return;
   }
 
+  // Handle Mongoose validation error
   if (error.name === 'ValidationError') {
+    const validationError = error as any;
+
     res.status(400).json({
       statusCode: 400,
       message: 'Validation error',
       errorCode: 'VALIDATION_ERROR',
-      details: (error as any).errors,
+      details: validationError.errors,
     });
     return;
   }

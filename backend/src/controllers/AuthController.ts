@@ -18,7 +18,7 @@ export class AuthController {
 
   static async login(req: Request, res: Response): Promise<void> {
     const { email, password } = req.body;
-
+    console.log("LOGIN CONTROLLER HIT");
     const result = await authService.login({ email, password });
 
     res.status(200).json({
