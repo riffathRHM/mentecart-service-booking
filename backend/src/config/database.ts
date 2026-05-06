@@ -19,6 +19,7 @@ export const connectDB = async (): Promise<void> => {
     });
 
     logger.info('MongoDB connected successfully');
+    console.log('Connected DB:', mongoose.connection.name);
 
     // Handle connection events
     mongoose.connection.on('disconnected', () => {
