@@ -1,11 +1,11 @@
 import 'express-async-errors';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import config from './src/config/env';
-import { connectDB } from './src/config/database';
-import { logger, createRequestLogger } from './src/config/logger';
-import { errorHandler } from './src/middleware/errorHandler';
-import apiRouter from './src/routes';
+import config from './config/env';
+import { connectDB } from './config/database';
+import { logger, createRequestLogger } from './config/logger';
+import { errorHandler } from './middleware/errorHandler';
+import apiRouter from './routes';
 
 const app = express();
 
@@ -78,7 +78,7 @@ const startServer = async () => {
           environment: config.NODE_ENV,
           apiUrl: `http://localhost:${config.PORT}/api`,
         },
-        '✓ Server started successfully'
+        'Server started successfully'
       );
     });
 
