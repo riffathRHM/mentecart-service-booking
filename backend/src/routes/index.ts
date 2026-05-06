@@ -31,5 +31,6 @@ router.get(
   validateQuery(serviceQuerySchema),
   asyncHandler(ServiceController.getServices)
 );
+router.get('/services/:id', asyncHandler(ServiceController.getServiceById));
 
 export default router;
