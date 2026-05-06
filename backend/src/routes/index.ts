@@ -32,5 +32,9 @@ router.get(
   asyncHandler(ServiceController.getServices)
 );
 router.get('/services/:id', asyncHandler(ServiceController.getServiceById));
+router.get(
+  '/services/:id/slots',
+  asyncHandler(ServiceController.getServiceWithSlots)
+);
 
 export default router;
