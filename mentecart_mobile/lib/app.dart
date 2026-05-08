@@ -1,5 +1,18 @@
 import 'package:flutter/material.dart';
-import 'router/app_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'core/config/environment.dart';
+import 'core/theme/app_theme.dart';
+
+import 'core/di/injection_container.dart'; // contains getIt
+
+import 'presentation/bloc/auth/auth_bloc.dart';
+import 'presentation/bloc/auth/auth_event.dart';
+import 'presentation/bloc/auth/auth_state.dart';
+
+import 'presentation/pages/auth/login_page.dart';
+import 'presentation/pages/home/home_page.dart';
+import 'presentation/router/app_router.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -7,13 +20,33 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'MenteCart UI',
+      title: Environment.appName,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.light,
+      debugShowCheckedModeBanner: Environment.isDebug,
+      onGenerateRoute: AppRouter.onGenerateRoute,
 
-      // Splash screen will run first
-      initialRoute: '/',
+      home: BlocProvider(
+        create: (_) => getIt<AuthBloc>()
+          ..add(const GetCurrentUserEvent()),
 
-      onGenerateRoute: AppRouter.generateRoute,
+        child: BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            if (state is AuthLoading) {
+              return const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
+            }
+
+            if (state is AuthAuthenticated) {
+              return const HomePage();
+            }
+
+            return const LoginPage();
+          },
+        ),
+      ),
     );
   }
 }

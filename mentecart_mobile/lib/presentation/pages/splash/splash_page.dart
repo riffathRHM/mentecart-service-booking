@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '/core/constants/app_colors.dart';
-import '/core/constants/app_typography.dart';
+import 'package:mentecart_mobile/core/constants/app_colors.dart';
+import 'package:mentecart_mobile/core/constants/app_typography.dart';
+
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -9,8 +10,7 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage>
-    with SingleTickerProviderStateMixin {
+class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
@@ -42,7 +42,7 @@ class _SplashPageState extends State<SplashPage>
   void _navigateToNextScreen() {
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        Navigator.pushReplacementNamed(context, '/signup');
+        Navigator.of(context).pushReplacementNamed('/login');
       }
     });
   }
@@ -75,6 +75,7 @@ class _SplashPageState extends State<SplashPage>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // Logo Container
                   Container(
                     width: 120,
                     height: 120,
@@ -102,6 +103,7 @@ class _SplashPageState extends State<SplashPage>
 
                   const SizedBox(height: 32),
 
+                  // App Name
                   Text(
                     'MenteCart',
                     style: AppTypography.displayMedium.copyWith(
@@ -111,6 +113,7 @@ class _SplashPageState extends State<SplashPage>
 
                   const SizedBox(height: 12),
 
+                  // Tagline
                   Text(
                     'Book Services, Anytime, Anywhere',
                     style: AppTypography.bodyMedium.copyWith(
@@ -120,12 +123,15 @@ class _SplashPageState extends State<SplashPage>
 
                   const SizedBox(height: 60),
 
-                  const SizedBox(
+                  // Loading Indicator
+                  SizedBox(
                     width: 40,
                     height: 40,
                     child: CircularProgressIndicator(
                       strokeWidth: 3,
-                      valueColor: AlwaysStoppedAnimation(Colors.white),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        AppColors.white,
+                      ),
                     ),
                   ),
                 ],

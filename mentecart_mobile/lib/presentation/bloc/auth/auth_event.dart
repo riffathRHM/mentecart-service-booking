@@ -42,3 +42,12 @@ class GetCurrentUserEvent extends AuthEvent {
 class LogoutEvent extends AuthEvent {
   const LogoutEvent();
 }
+
+class RefreshTokenEvent extends AuthEvent {
+  final String refreshToken;
+
+  const RefreshTokenEvent(this.refreshToken);
+
+  @override
+  List<Object?> get props => [refreshToken];
+}
