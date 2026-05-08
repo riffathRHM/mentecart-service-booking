@@ -1,12 +1,13 @@
 import { Router } from "express";
 import { AuthController } from "../controllers/AuthController";
 import { validateBody } from "../middleware/validation";
-import { signupSchema,loginSchema,serviceQuerySchema,addToCartSchema,updateCartItemSchema } from "../validators";
+import { signupSchema,loginSchema,serviceQuerySchema,addToCartSchema,updateCartItemSchema,checkoutSchema,cancelBookingSchema} from "../validators";
 import { asyncHandler } from "../middleware/errorHandler";
 import { authMiddleware } from '../middleware/auth';
 import { validateQuery } from "../middleware/validation";
 import { ServiceController } from "../controllers/ServiceController";
 import { CartController } from "../controllers/CartController";
+import { BookingController } from "../controllers/BookingController";
 
 const router = Router();
 
@@ -57,5 +58,29 @@ router.delete(
   '/cart/items/:itemId',
   authMiddleware,
   asyncHandler(CartController.removeFromCart)
+);
+
+//booking routes
+router.post(
+  '/bookings/checkout',
+  authMiddleware,
+  validateBody(checkoutSchema),
+  asyncHandler(BookingController.checkout)
+);
+
+ 
+router.get('/bookings', authMiddleware, asyncHandler(BookingController.getBookings));
+ 
+router.get(
+  '/bookings/:id',
+  authMiddleware,
+  asyncHandler(BookingController.getBookingById)
+);
+ 
+router.post(
+  '/bookings/:id/cancel',
+  authMiddleware,
+  validateBody(cancelBookingSchema),
+  asyncHandler(BookingController.cancelBooking)
 );
 export default router;
