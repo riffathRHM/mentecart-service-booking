@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { AuthController } from "../controllers/AuthController";
 import { validateBody } from "../middleware/validation";
-import { signupSchema,loginSchema,serviceQuerySchema } from "../validators";
+import { signupSchema,loginSchema,serviceQuerySchema,addToCartSchema,updateCartItemSchema } from "../validators";
 import { asyncHandler } from "../middleware/errorHandler";
 import { authMiddleware } from '../middleware/auth';
 import { validateQuery } from "../middleware/validation";
 import { ServiceController } from "../controllers/ServiceController";
+import { CartController } from "../controllers/CartController";
 
 const router = Router();
 
@@ -37,4 +38,24 @@ router.get(
   asyncHandler(ServiceController.getServiceWithSlots)
 );
 
+//cart Routes
+router.get('/cart', authMiddleware, asyncHandler(CartController.getCart));
+router.post(
+  '/cart/items',
+  authMiddleware,
+  validateBody(addToCartSchema),
+  asyncHandler(CartController.addToCart)
+);
+router.patch(
+  '/cart/items/:itemId',
+  authMiddleware,
+  validateBody(updateCartItemSchema),
+  asyncHandler(CartController.updateCartItem)
+);
+ 
+router.delete(
+  '/cart/items/:itemId',
+  authMiddleware,
+  asyncHandler(CartController.removeFromCart)
+);
 export default router;
