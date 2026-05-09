@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/config/environment.dart';
 import 'core/theme/app_theme.dart';
 
-import 'core/di/injection_container.dart'; // contains getIt
-
 import 'presentation/bloc/auth/auth_bloc.dart';
 import 'presentation/bloc/auth/auth_event.dart';
 import 'presentation/bloc/auth/auth_state.dart';
@@ -19,6 +17,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // trigger auth check
+    context.read<AuthBloc>().add(
+      const GetCurrentUserEvent(),
+    );
+
     return MaterialApp(
       title: Environment.appName,
       theme: AppTheme.lightTheme,
@@ -27,25 +31,22 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: Environment.isDebug,
       onGenerateRoute: AppRouter.onGenerateRoute,
 
-      home: BlocProvider(
-        create: (_) => getIt<AuthBloc>()
-          ..add(const GetCurrentUserEvent()),
+      home: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          if (state is AuthLoading) {
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
 
-        child: BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, state) {
-            if (state is AuthLoading) {
-              return const Scaffold(
-                body: Center(child: CircularProgressIndicator()),
-              );
-            }
+          if (state is AuthAuthenticated) {
+            return const HomePage();
+          }
 
-            if (state is AuthAuthenticated) {
-              return const HomePage();
-            }
-
-            return const LoginPage();
-          },
-        ),
+          return const LoginPage();
+        },
       ),
     );
   }

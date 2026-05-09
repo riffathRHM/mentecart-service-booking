@@ -7,15 +7,15 @@ part of 'service_model.dart';
 // **************************************************************************
 
 ServiceModel _$ServiceModelFromJson(Map<String, dynamic> json) => ServiceModel(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      price: (json['price'] as num).toDouble(),
-      duration: (json['duration'] as num).toInt(),
-      category: json['category'] as String,
-      capacityPerSlot: (json['capacityPerSlot'] as num).toInt(),
+      id: json['_id'] as String?,
+      title: json['title'] as String?,
+      description: json['description'] as String?,
+      price: (json['price'] as num?)?.toDouble(),
+      duration: (json['duration'] as num?)?.toInt(),
+      category: json['category'] as String?,
+      capacityPerSlot: (json['capacityPerSlot'] as num?)?.toInt(),
       image: json['image'] as String?,
-      isActive: json['isActive'] as bool,
+      isActive: json['isActive'] as bool?,
     );
 
 Map<String, dynamic> _$ServiceModelToJson(ServiceModel instance) =>

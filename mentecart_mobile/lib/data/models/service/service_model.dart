@@ -5,27 +5,28 @@ part 'service_model.g.dart';
 
 @JsonSerializable()
 class ServiceModel {
-  final String id;
-  final String title;
-  final String description;
-  final double price;
-  final int duration;
-  final String category;
+  @JsonKey(name: '_id')
+  final String? id;
+  final String? title;
+  final String? description;
+  final double? price;
+  final int? duration;
+  final String? category;
   @JsonKey(name: 'capacityPerSlot')
-  final int capacityPerSlot;
+  final int? capacityPerSlot;
   final String? image;
-  final bool isActive;
+  final bool? isActive;
 
   ServiceModel({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.price,
-    required this.duration,
-    required this.category,
-    required this.capacityPerSlot,
+    this.id,
+    this.title,
+    this.description,
+    this.price,
+    this.duration,
+    this.category,
+    this.capacityPerSlot,
     this.image,
-    required this.isActive,
+    this.isActive,
   });
 
   factory ServiceModel.fromJson(Map<String, dynamic> json) =>
@@ -34,14 +35,14 @@ class ServiceModel {
   Map<String, dynamic> toJson() => _$ServiceModelToJson(this);
 
   Service toDomain() => Service(
-    id: id,
-    title: title,
-    description: description,
-    price: price,
-    duration: duration,
-    category: category,
-    capacityPerSlot: capacityPerSlot,
+    id: id ?? '',
+    title: title ?? 'Unknown',
+    description: description ?? '',
+    price: price ?? 0.0,
+    duration: duration ?? 0,
+    category: category ?? 'Other',
+    capacityPerSlot: capacityPerSlot ?? 1,
     image: image,
-    isActive: isActive,
+    isActive: isActive ?? true,
   );
 }
